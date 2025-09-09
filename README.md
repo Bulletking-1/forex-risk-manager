@@ -1,22 +1,92 @@
-# Forex Risk Manager
+# Forex Risk Manager Pro
 
-A simple yet powerful **Forex Risk Management Tool** designed to help traders calculate optimal position sizes, manage risk per trade, and improve trading discipline.
-
----
-
-## Features
-- Calculate position size based on:
-  - Account balance
-  - Risk percentage per trade
-  - Stop-loss in pips
-  - Pip value
-- Easy to use and lightweight
-- Written in **Python** for maximum flexibility
+## 📌 Overview
+Forex Risk Manager Pro is an open-source project that helps traders manage risk by calculating optimal lot size, position sizing, and providing visualization tools. It also includes the foundation for integrating algorithmic trading strategies using Smart Money Concepts (SMC).
 
 ---
 
-## Installation
+## 🚀 Features
+- **Web Risk Calculator** – Calculate lot size based on account balance, risk %, and stop-loss.
+- **Data Export** – Export results to PDF/Excel.
+- **Interactive Charts** – Visualize risk exposure and trade history.
+- **Algorithmic Trading Bot (SMC)** – Python module for automating entries & exits (in progress).
+- **Deployment Ready** – Frontend (HTML/JS/CSS), Backend (Flask/Django).
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/Bulletking-1/forex-risk-manager.git
+---
+
+## 📂 Project Structure
+```
+forex-risk-manager-pro/
+│── frontend/
+│   ├── index.html        # Main web interface
+│   ├── style.css         # Styling
+│   └── script.js         # Risk calculation logic
+│── backend/
+│   ├── app.py            # Flask backend
+│   ├── risk_calculator.py # Core calculation module
+│   ├── requirements.txt  # Dependencies
+│── bot/
+│   └── smc_bot.py        # Algorithmic trading bot (Python)
+│── tests/
+│   └── test_risk_calculator.py
+│── docs/
+│   └── README.md
+│── LICENSE
+```
+
+---
+
+## 🛠️ Installation
+### Backend Setup
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/forex-risk-manager-pro.git
+cd forex-risk-manager-pro/backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run server
+python app.py
+```
+
+### Frontend Setup
+Simply open `frontend/index.html` in your browser (or serve with Flask backend).
+
+---
+
+## 📊 Example Usage
+1. Enter account balance, stop-loss (pips), and risk %.
+2. App returns recommended **lot size** and **risk in USD**.
+3. Visualize risk distribution using charts.
+
+---
+
+## 🧑‍💻 Tech Stack
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Python (Flask/Django)
+- **Trading Tools**: MT4/MT5 API (optional)
+- **Visualization**: Chart.js / TradingView Widget
+
+---
+
+## 📌 Future Improvements
+- Integration with **MT4/MT5** for live trading.
+- Portfolio tracking & trade journaling.
+- AI/ML-based trade prediction.
+
+---
+
+## 📜 License
+MIT License – Free to use and modify.
+
+---
+
+## 👨‍💻 Author
+**Malumo Lifasi**  
+📧 lifasimalumo48@gmail.com  
+🌍 Windhoek, Namibia
