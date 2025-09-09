@@ -1,11 +1,225 @@
+# Forex Risk Manager Pro
+
+## 📌 Overview
+Forex Risk Manager Pro is an open-source project that helps traders manage risk by calculating optimal lot size, position sizing, and providing visualization tools. It also includes the foundation for integrating algorithmic trading strategies using Smart Money Concepts (SMC).
+
+---
+
+## 🚀 Features
+- **Web Risk Calculator** – Calculate lot size based on account balance, risk %, and stop-loss.
+- **Data Export** – Export results to PDF/Excel.
+- **Interactive Charts** – Visualize risk exposure and trade history.
+- **Algorithmic Trading Bot (SMC)** – Python module for automating entries & exits (in progress).
+- **Deployment Ready** – Frontend (HTML/JS/CSS), Backend (Flask).
+
+---
+
+## 📂 Project Structure
+```
+forex-risk-manager-pro/
+│── frontend/
+│   ├── index.html        # Main web interface
+│   ├── style.css         # Styling
+│   └── script.js         # Risk calculation logic
+│── backend/
+│   ├── app.py            # Flask backend
+│   ├── risk_calculator.py # Core calculation module
+│   ├── requirements.txt  # Dependencies
+│── bot/
+│   └── smc_bot.py        # Algorithmic trading bot (Python)
+│── tests/
+│   └── test_risk_calculator.py
+│── docs/
+│   └── README.md
+│── LICENSE
+```
+
+---
+
+## 🛠️ Starter Code
+
+### ✅ frontend/index.html
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Forex Risk Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forex Risk Manager Pro</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Forex Risk Manager</h1>
-  <p>Your calculator will appear here soon!</p>
+  <div class="container">
+    <h1>Forex Risk Manager Pro</h1>
+    <form id="riskForm">
+      <label>Account Balance ($): <input type="number" id="balance" required></label>
+      <label>Risk %: <input type="number" id="risk" required></label>
+      <label>Stop Loss (pips): <input type="number" id="stopLoss" required></label>
+      <button type="submit">Calculate</button>
+    </form>
+    <div id="result"></div>
+    <canvas id="riskChart"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
+```
+
+### ✅ frontend/style.css
+```css
+body {
+  font-family: Arial, sans-serif;
+  background: #0d0d0d;
+  color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+input, button {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #45a049;
+}
+```
+
+### ✅ frontend/script.js
+```javascript
+document.getElementById("riskForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  let balance = parseFloat(document.getElementById("balance").value);
+  let riskPercent = parseFloat(document.getElementById("risk").value);
+  let stopLoss = parseFloat(document.getElementById("stopLoss").value);
+
+  let riskAmount = (balance * (riskPercent / 100));
+  let lotSize = riskAmount / (stopLoss * 10);
+
+  document.getElementById("result").innerHTML = `
+    <p>Risk Amount: $${riskAmount.toFixed(2)}</p>
+    <p>Recommended Lot Size: ${lotSize.toFixed(2)} lots</p>
+  `;
+
+  let ctx = document.getElementById("riskChart").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Risk Amount", "Remaining Balance"],
+      datasets: [{
+        data: [riskAmount, balance - riskAmount],
+        backgroundColor: ["#FF6384", "#36A2EB"]
+      }]
+    }
+  });
+});
+```
+
+### ✅ backend/app.py
+```python
+from flask import Flask, request, jsonify
+from risk_calculator import calculate_lot_size
+
+app = Flask(__name__)
+
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    data = request.json
+    balance = float(data['balance'])
+    risk_percent = float(data['risk'])
+    stop_loss = float(data['stopLoss'])
+
+    result = calculate_lot_size(balance, risk_percent, stop_loss)
+    return jsonify(result)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### ✅ backend/risk_calculator.py
+```python
+def calculate_lot_size(balance, risk_percent, stop_loss):
+    risk_amount = balance * (risk_percent / 100)
+    lot_size = risk_amount / (stop_loss * 10)
+    return {
+        "risk_amount": round(risk_amount, 2),
+        "lot_size": round(lot_size, 2)
+    }
+```
+
+### ✅ backend/requirements.txt
+```
+flask
+```
+
+### ✅ bot/smc_bot.py
+```python
+# Placeholder for Smart Money Concepts (SMC) trading bot
+# Future: integrate with MT4/MT5 APIs
+
+def smc_strategy(price_data):
+    # Example: Detect liquidity grab & return trade signal
+    if price_data[-1] > max(price_data[:-1]):
+        return "SELL"
+    elif price_data[-1] < min(price_data[:-1]):
+        return "BUY"
+    else:
+        return "HOLD"
+```
+
+### ✅ tests/test_risk_calculator.py
+```python
+import unittest
+from backend.risk_calculator import calculate_lot_size
+
+class TestRiskCalculator(unittest.TestCase):
+    def test_calculate(self):
+        result = calculate_lot_size(1000, 2, 50)
+        self.assertEqual(result['risk_amount'], 20.0)
+        self.assertAlmostEqual(result['lot_size'], 0.04, places=2)
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+---
+
+## 🧑‍💻 Tech Stack
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Python (Flask)
+- **Trading Tools**: MT4/MT5 API (future)
+- **Visualization**: Chart.js
+
+---
+
+## 📜 License
+MIT License – Free to use and modify.
+
+---
+
+## 👨‍💻 Author
+**Malumo Lifasi**  
+📧 lifasimalumo48@gmail.com  
+🌍 Windhoek, Namibia
